@@ -1,4 +1,4 @@
 # machine generated code
 /.venv
 /.bin
-/__pycache__
+**/__pycache__
