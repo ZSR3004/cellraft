@@ -9,6 +9,14 @@ class RaftMemoryManager:
     def __init__(self, threshold_mb=1000):
         self.threshold_mb = threshold_mb
         self.peak_memory = 0
+   
+    @staticmethod
+    def enable_memory_efficient_mode():
+        """Enable memory-efficient settings for PyTorch."""
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+        torch.set_num_threads(2)
+        gc.set_threshold(100, 5, 5)
 
     def get_memory_usage(self):
         """
