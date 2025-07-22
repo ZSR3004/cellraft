@@ -68,6 +68,18 @@ class GradientAccumulator:
 def setup_optimizer(model: torch.nn.Module,
                     lr: float = 1e-4, weight_decay: float = 1e-4,
                     num_epochs=10) -> tuple[optim.AdamW, optim.lr_scheduler.CosineAnnealingLR]:
+    """
+    Setup the optimizer and learning rate scheduler for the model.
+
+    Args:
+        model (torch.nn.Module): The model to optimize.
+        lr (float): Learning rate for the optimizer.
+        weight_decay (float): Weight decay for the optimizer.
+        num_epochs (int): Number of epochs for the learning rate scheduler.
+
+    Returns:
+        tuple: A tuple containing the optimizer and the learning rate scheduler.
+    """ 
     optimizer = optim.AdamW(
         model.parameters(),
         lr=lr,
@@ -84,3 +96,5 @@ def setup_optimizer(model: torch.nn.Module,
     )
 
     return optimizer, scheduler
+
+
