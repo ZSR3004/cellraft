@@ -12,7 +12,7 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader, Subset
 from torchvision.models.optical_flow import raft_small  # small for optimization
 
-from src.raft.raft_dataset import RaftDataset, custom_collate_fn
+from src.raft.raft_dataset import MemoryManagedRaftDataSet, custom_collate_fn
 import src.raft.raft_memory_manager as ramem
 
 
@@ -96,5 +96,20 @@ def setup_optimizer(model: torch.nn.Module,
     )
 
     return optimizer, scheduler
+
+def compute_loss(predictions: torch.Tensor, ground_truth: torch.Tensor, batch_idx: int = None) -> float:
+    pass
+
+def init_model():
+    pass
+
+def train_model():
+    pass
+
+def train_epoch():
+    pass 
+
+def run_validation_epoch():
+    pass
 
 

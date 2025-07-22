@@ -1,11 +1,9 @@
-from math import e
 import random
 import torch
 import torch.nn.functional as F
 from torch.utils.data import Dataset
 
-from src.util import get_paths
-
+from src.raft.raft_memory_manager import RaftMemoryManager
 
 class RaftDataset(Dataset):
     def __init__(self, input_path: list[str], target_path: list[str],
@@ -125,3 +123,26 @@ def custom_collate_fn(batch: list[tuple[torch.Tensor, torch.Tensor]]) -> tuple[t
 
     except Exception as e:
         raise RuntimeError(f"Error in custom collate function: {e}")
+
+
+class MemoryManagedRaftDataSet():
+    """A wrapper around RaftDataset that manages memory usage by limiting
+    the number of samples loaded at once."""
+    def __init__(self, dataloader: RaftDataset, memory_monitor: 
+                 RaftMemoryManager, 
+                 cleanup_frequency: int = 5): 
+        self.dataloader = dataloader
+        self.memory_monitor = memory_monitor
+        self.cleanup_frequency = cleanup_frequency
+        self.batch_count = 0
+
+    def __iter__(self):
+        for batch in self.dataloader:
+            self.batch_count += 1
+            if self.batch_count % self.cleanup_frequency == True:
+                self.memory_monitor.checkup_and_clean()
+            yield batch
+
+    def __len__(self):
+        """wrapper around dataloader length"""
+        return len(self.dataloader)
